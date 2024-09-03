@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: file-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/files
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: bhbirf2003
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+        hbm2ddl:
+          auto: update
+server:
+  port: 8082
