@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.Base64;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +18,9 @@ public class FileService {
     private final FileRepository fileRepository;
 
     public String uploadFile(FileRequest fileRequest) {
-        System.out.println(fileRequest.toString());
         File file = mapFromDto(fileRequest);
-        fileRepository.save(file);
-        return String.valueOf(file.getId());
+        File savedFile = fileRepository.save(file);
+        return String.valueOf(savedFile.getId());
     }
 
     public FileResponse getFile(String id) {
@@ -29,6 +29,13 @@ public class FileService {
             throw new RuntimeException("File not found");
         }
         return mapToDto(file);
+    }
+
+    public List<FileResponse> getAllFiles() {
+        return fileRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
 

@@ -1,13 +1,14 @@
 package org.example.fileservice.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import org.example.fileservice.dto.FileRequest;
 import org.example.fileservice.dto.FileResponse;
 import org.example.fileservice.service.FileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
+
+import java.util.List;
 
 @RestController()
 @RequestMapping("/api/v1/file-service")
@@ -26,5 +27,10 @@ public class FileController {
     @GetMapping("/get")
     public FileResponse getFile(@RequestParam("id") String id){
         return fileService.getFile(id);
+    }
+
+    @GetMapping("/get_all")
+    public List<FileResponse> getAllFile(){
+        return fileService.getAllFiles();
     }
 }
