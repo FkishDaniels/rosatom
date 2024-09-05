@@ -5,12 +5,14 @@ import org.example.fileservice.dto.FileRequest;
 import org.example.fileservice.dto.FileResponse;
 import org.example.fileservice.model.File;
 import org.example.fileservice.repository.FileRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
 
 import java.util.Base64;
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +33,9 @@ public class FileService {
         return mapToDto(file);
     }
 
-    public List<FileResponse> getAllFiles() {
-        return fileRepository.findAll()
-                .stream()
-                .map(this::mapToDto)
-                .toList();
+    public Page<FileResponse> getAllFiles(Pageable pageable) {
+        return fileRepository.findAll(pageable)
+                .map(this::mapToDto);
     }
 
 

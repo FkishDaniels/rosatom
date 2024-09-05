@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -84,11 +86,14 @@ public class FileControllerTest {
                 .creationDate(LocalDateTime.parse("2023-01-01T10:15:30"))
                 .build();
 
-        List<FileResponse> fileResponses = Arrays.asList(file1, file2);
+        List<FileResponse> fileResponseList = Arrays.asList(file1, file2);
+        Page<FileResponse> fileResponses = new PageImpl<>(fileResponseList);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("creationDate"));
+        when(fileService.getAllFiles(pageable)).thenReturn(fileResponses);
 
-        when(fileService.getAllFiles()).thenReturn(fileResponses);
+        ResponseEntity<Page<FileResponse>> responseEntity = fileController.getAllFile(0);
 
-        List<FileResponse> result = fileController.getAllFile();
-        assertEquals(fileResponses, result);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(fileResponses, responseEntity.getBody());
     }
 }

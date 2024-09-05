@@ -12,6 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -107,13 +111,13 @@ public class FileServiceTest {
         file2.setFileData("data2");
 
         List<File> files = Arrays.asList(file1, file2);
+        Page<File> filePage = new PageImpl<>(files);
+        when(fileRepository.findAll(any(Pageable.class))).thenReturn(filePage);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<FileResponse> fileResponses = fileService.getAllFiles(pageable);
 
-        when(fileRepository.findAll()).thenReturn(files);
-
-        List<FileResponse> fileResponses = fileService.getAllFiles();
-
-        assertEquals(2, fileResponses.size());
-        assertEquals("File 1", fileResponses.get(0).getTitle());
-        assertEquals("File 2", fileResponses.get(1).getTitle());
+        assertEquals(2, fileResponses.getTotalElements());
+        assertEquals("File 1", fileResponses.getContent().get(0).getTitle());
+        assertEquals("File 2", fileResponses.getContent().get(1).getTitle());
     }
 }
