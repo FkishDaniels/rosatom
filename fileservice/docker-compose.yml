@@ -7,20 +7,22 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=bhbirf2003
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=file_db
     volumes:
       - file_service:/var/lib/postgresql/data
     ports:
-      - "127.0.0.1:5431:5431"
+      - "127.0.0.1:5432:5432"
   app:
     restart: always
     build: .
     ports:
-      - "8082:8080"
+      - "8082:8082"
     depends_on:
       - file_db
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://file_db:5431/file_db'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://file_db:5432/file_db'
+      DB_USER: 'postgres'
+      DB_PASSWORD: 'password'
       JAVA_OPTS: '-Xmx512m'
 
