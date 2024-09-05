@@ -3,7 +3,7 @@ spring:
     name: file-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/files
+    url: ${SPRING_DATASOURCE_URL}
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: bhbirf2003

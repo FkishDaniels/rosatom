@@ -1,1 +1,26 @@
-version: '2'
+version: '3.1'
+volumes:
+  file_service:
+services:
+  file_db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=bhbirf2003
+      - POSTGRES_DB=file_db
+    volumes:
+      - file_service:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5431:5431"
+  app:
+    restart: always
+    build: .
+    ports:
+      - "8082:8080"
+    depends_on:
+      - file_db
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://file_db:5431/file_db'
+      JAVA_OPTS: '-Xmx512m'
+
